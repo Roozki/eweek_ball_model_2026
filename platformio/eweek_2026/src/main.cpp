@@ -1,20 +1,26 @@
-#include <Arduino.h>
+#include <../include/main.h> // where tf is the cmakelists
 
-// put function declarations here:
-int myFunction(int, int);
+Servo spigot_servo;
+Spigot spigot(spigot_servo);
 
 void setup() {
-  // put your setup code here, to run once:
-  int result = myFunction(2, 3);
+
+  Serial.begin(115200);
+  ESP32PWM::allocateTimer(0);
+  spigot.init();
+
+  delay(1000);
+  Serial.println(comms::STARTUP_MSG);
+
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
+  // send(comms::MsgId::play_sound);
+  spigot.open();
+  delay(1000);
+  spigot.close();
+  delay(1000);
 
-  
-}
 
-// put function definitions here:
-int myFunction(int x, int y) {
-  return x + y;
 }
