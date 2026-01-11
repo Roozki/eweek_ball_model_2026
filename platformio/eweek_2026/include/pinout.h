@@ -10,3 +10,6 @@
 //Default: ±60º, Non-programmable / Pulse Width: 900~2100μs(Center:1500μs) HS-55 hitec
 #define SPIGOT_SERVO_PIN 32
 
+
+// LEDS
+#define LED_DATA_PIN 18
