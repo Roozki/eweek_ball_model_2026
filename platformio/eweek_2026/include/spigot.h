@@ -2,7 +2,7 @@
 #include <ESP32Servo.h>
 
 
-#include "pinout.h"
+#include "pinout_esp.h"
 
 class Spigot {
 public:

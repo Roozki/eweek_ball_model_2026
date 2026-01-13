@@ -2,7 +2,7 @@
 #include <Arduino.h>
 
 
-#include "pinout.h"
+#include "pinout_esp.h"
 
 // void ARDUINO_ISR_ATTR front_sonar_isr() {
 
@@ -17,28 +17,32 @@ public:
     Sonar() {};
 
     void init() {
-        pinMode(SONIC_FRONT_ECHO_PIN, INPUT);
-        pinMode(SONIC_FRONT_TRIG_PIN, OUTPUT);
-        digitalWrite(SONIC_FRONT_TRIG_PIN, LOW);
+        // pinMode(SONIC_FRONT_ECHO_PIN, INPUT);
+        // pinMode(SONIC_FRONT_TRIG_PIN, OUTPUT);
+        // digitalWrite(SONIC_FRONT_TRIG_PIN, LOW);
     }
 
     uint32_t get_distance()
     {
         start_wave();
+        await_wave();
     }
 
 private:
 
     void start_wave()
     {
-        digitalWrite(SONIC_FRONT_TRIG_PIN, HIGH);
+        // digitalWrite(SONIC_FRONT_TRIG_PIN, HIGH);
         delayMicroseconds(10);
-
+    }
+    void await_wave()
+    {
+        // pulseIn(SONI)
     }
 
     void reset()
     {
-        digitalWrite(SONIC_FRONT_TRIG_PIN, LOW);
+        // digitalWrite(SONIC_FRONT_TRIG_PIN, LOW);
         delayMicroseconds(2); // Reset
     }
 
