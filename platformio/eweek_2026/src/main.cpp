@@ -1,15 +1,11 @@
 #include <../include/main.h> // where tf is the cmakelists
 
-Servo spigot_servo;
-Spigot spigot(spigot_servo);
-L298n_Drive drive(RIGHT_A_DRIVE_PWM_PIN, RIGHT_A_IN1_PIN, RIGHT_A_IN2_PIN, LEFT_B_DRIVE_PWM_PIN, LEFT_B_IN3_PIN, LEFT_B_IN4_PIN);
-
-CRGB leds[NUM_LEDS];
 
 
 void setup() {
 
-  Serial.begin(115200);
+  // Serial.begin(115200);
+  comms::init();
   // ESP32PWM::allocateTimer(0);
   // spigot.init();
   // pinMode(LED_DATA_PIN, OUTPUT);
@@ -21,22 +17,37 @@ void setup() {
   // Serial.println(comms::STARTUP_MSG);
 }
 
+void run_app()
+{
+
+}
+
 void loop() {
+
   uint32_t timestamp_ms = millis();
+  comms::poll_rx_buffer();
   // digitalWrite(LED_DATA_PIN, HIGH);
   // send(comms::MsgId::play_sound, "ON");
   // for(auto &led : leds)
   // {
   //   led = CRGB::Red;
   // }
-  drive.setSpeed(50);
-    if(timestamp_ms > 5000)
-  {
-    drive.setState(DriveState::stop);
-  } else {
-    drive.setState(DriveState::forward);
 
-  }
+  drive.setSpeed(30);
+  //   if(timestamp_ms > 5000)
+  // {
+  //   drive.setState(DriveState::stop);
+  //   if(timestamp_ms > 10000)
+  //   {
+  //     drive.setState(DriveState::backward);
+  //     if (timestamp_ms > 15000)
+  //     {
+  //       drive.setState(DriveState::stop);
+  //     }
+  //   }
+  // } else {
+  //   drive.setState(DriveState::forward);
+  // }
   // drive.current_A_speed = 80;
   // drive.current_B_speed = 80;
   drive.run(timestamp_ms);
@@ -45,7 +56,7 @@ void loop() {
           // analogWrite(drive.A_pwm_pin, drive.current_A_speed);
         // analogWrite(drive.B_pwm_pin, drive.current_B_speed);
 
-  Serial.println(drive.current_A_speed);
+  // Serial.println(drive.current_A_speed);
 
   delay(1);
   // FastLED.show();

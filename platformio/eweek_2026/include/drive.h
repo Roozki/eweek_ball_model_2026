@@ -1,3 +1,4 @@
+#pragma once
 #include <Arduino.h>
 // #include 
 
@@ -91,15 +92,15 @@ public:
                 digitalWrite(in1_pin, LOW);
                 digitalWrite(in2_pin, HIGH);
 
-                digitalWrite(in3_pin, HIGH);
-                digitalWrite(in4_pin, LOW);
+                digitalWrite(in3_pin, LOW);
+                digitalWrite(in4_pin, HIGH);
                 break;
             case DriveState::backward:
                 digitalWrite(in1_pin, HIGH);
                 digitalWrite(in2_pin, LOW);
 
-                digitalWrite(in3_pin, LOW);
-                digitalWrite(in4_pin, HIGH);
+                digitalWrite(in3_pin, HIGH);
+                digitalWrite(in4_pin, LOW);
                 break;
 
 
