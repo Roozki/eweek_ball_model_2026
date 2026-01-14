@@ -3,46 +3,9 @@
 #include <Arduino.h>
 #include <drive.h>
 #include <main_datatypes.h>
+#include "comm_protocol.h"
 
 namespace comms {
-    // Startup message
-    static inline constexpr char STARTUP_MSG[] = "PROGRAM_START";
-
-// General params
-static inline constexpr uint32_t MAX_DATA_SIZE_BYTES = 32u;
-static inline constexpr uint32_t MAX_MSG_SIZE_BYTES = 48u;
-static inline constexpr uint32_t MSG_ID_SIZE_BYTES = 1u;
-
-static inline constexpr uint32_t MIN_RX_MSG_SIZE_BYTES = 3u;
-static inline constexpr uint32_t MAX_RX_MSG_SIZE_BYTES = 8u;
-
-// Msg structure: (TX + RX)
-// Starter + Message ID + Data opener + data (optional) + data closer/message end
-
-// Static parts
-static inline constexpr uint32_t MSG_STARTER_OFFSET = 0u;
-static inline constexpr uint32_t MESSAGE_ID_OFFSET = 1u;
-static inline constexpr uint32_t MESSAGE_ID_SIZE = 1u;
-static inline constexpr uint32_t DATA_OPENER_OFFSET = MESSAGE_ID_OFFSET + MESSAGE_ID_SIZE;
-static inline constexpr uint32_t DATA_OFFSET = 3u;
-// Then, message data is parsed by knowing the message id
-
-static inline constexpr char MSG_STARTER[] = "$";
-static inline constexpr char DATA_OPENER[] = "(";
-static inline constexpr char DATA_CLOSER[] = ")\n"; // data closer + message end character (endline)
-
-// Message IDs:
-enum class MsgId : uint8_t {
-    unspecified = 0x00,
-    // mcu <- computer
-    sound_played    = 0xA1, //?
-    drive_stop      = 0xD0,
-    drive_forward   = 0xD1,
-    drive_backward   = 0xD2,
-    // mcu -> computer
-    play_sound = 0xC1, //?
-
-};
 
 // RX raw buffer (stores a single message)
     char raw_rx_buff[MAX_RX_MSG_SIZE_BYTES] = {};
@@ -91,6 +54,14 @@ void parse_buffer(char (&buff)[MAX_RX_MSG_SIZE_BYTES])
             drive.setState(DriveState::backward);
             Serial.println("Backwards");
             break;
+        case MsgId::comm_ack:
+            if(machine.get_state() == State::await_comms_ack)
+            {
+                if(machine.signal_comms_acked())
+                {
+                    Serial.println("Comms acked!");
+                }
+            }
         default:
             Serial.println("Unkown: Error");
             break;

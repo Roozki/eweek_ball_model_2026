@@ -11,8 +11,11 @@
         "/home/rowan/RoverFlake2/install/rover_utils/include/**",
         "/home/rowan/RoverFlake2/install/rover_msgs/include/**",
         "/home/rowan/RoverFlake2/install/moteus_msgs/include/**",
+        "/home/rowan/eweek_ball_model_2026/ros/src/**",
         "/opt/ros/humble/include/**",
+        "/home/rowan/eweek_ball_model_2026/ros/src/external/serial-ros2/include/serial/**",
         "/home/rowan/eweek_ball_model_2026/ros/src/eweek/include/**",
+        "/home/rowan/eweek_ball_model_2026/platformio/eweek_2026/include/**",
         "/usr/include/**"
       ],
       "name": "ros2",

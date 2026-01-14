@@ -1,6 +1,6 @@
 #pragma once
 #include <Arduino.h>
-// #include 
+#include "main_definitions.h"
 
 #define MAX_PWM_RAW_OUTPUT 200
 #define MIN_PWM_RAW_OUTPUT 0
@@ -74,8 +74,7 @@ public:
     void setSpeed(int32_t speed)
     {
         int32_t new_speed = map(speed, 0, 100, MIN_PWM_RAW_OUTPUT, MAX_PWM_RAW_OUTPUT);
-        this->desired_A_speed = new_speed;
-        this->desired_B_speed = new_speed;
+        setpoint_speed = new_speed;
     }
 
     // Like set gear
@@ -85,10 +84,15 @@ public:
 
         switch(current_drive_state){
             case DriveState::stop:
-                setSpeed(0);
+                // setSpeed(0);
+                this->desired_A_speed = 0;
+                this->desired_B_speed = 0;
                 // Allow accel to stop motors
                 break;
             case DriveState::forward:
+                this->desired_A_speed = setpoint_speed;
+                this->desired_B_speed = setpoint_speed;
+
                 digitalWrite(in1_pin, LOW);
                 digitalWrite(in2_pin, HIGH);
 
@@ -96,6 +100,8 @@ public:
                 digitalWrite(in4_pin, HIGH);
                 break;
             case DriveState::backward:
+                this->desired_A_speed = setpoint_speed;
+                this->desired_B_speed = setpoint_speed;
                 digitalWrite(in1_pin, HIGH);
                 digitalWrite(in2_pin, LOW);
 
@@ -151,6 +157,9 @@ public:
     int32_t desired_B_speed = 0;
 
     uint32_t update_period_ms = 10; // Updates at 100hz default
+
+    int32_t setpoint_speed = 30;
+
     void handle_accel(int32_t& current_speed, int32_t desired_speed)
     {
         // accell
