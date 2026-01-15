@@ -1,9 +1,33 @@
 #include <app.h>
+#include <filesystem>
+#include <iostream>
+#include <ament_index_cpp/get_package_share_directory.hpp>
 
 using namespace comms;
 
 EWeekApp::EWeekApp() : Node("EWeek_App")
 {
+    // Load sounds dynamically
+    try {
+        std::string sounds_dir = ament_index_cpp::get_package_share_directory("rover_sounds") + "/sounds";
+        if(std::filesystem::exists(sounds_dir) && std::filesystem::is_directory(sounds_dir)) {
+            for(const auto& entry : std::filesystem::directory_iterator(sounds_dir)) {
+                if(entry.is_regular_file()) {
+                    std::string ext = entry.path().extension().string();
+                    if(ext == ".wav" || ext == ".ogg" || ext == ".mp3") { // Supporting mp3 if we added support earlier or just listing
+                         // Store just the filename as the path is known by the speaker node
+                        sound_files.push_back(entry.path().filename().string());
+                    }
+                }
+            }
+            RCLCPP_INFO(this->get_logger(), "Loaded %zu sound files", sound_files.size());
+        } else {
+             RCLCPP_WARN(this->get_logger(), "Sound directory not found: %s", sounds_dir.c_str());
+        }
+    } catch (const std::exception& e) {
+        RCLCPP_ERROR(this->get_logger(), "Error loading sounds: %s", e.what());
+    }
+
     auto qos = rclcpp::QoS(rclcpp::KeepLast(1)).reliable().durability_volatile(); //? AHHHH WHAT THE FUCK IS A QOS
 
         cmd_vel_subscriber = this->create_subscription<geometry_msgs::msg::Twist>(

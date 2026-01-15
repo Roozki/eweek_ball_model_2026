@@ -73,17 +73,7 @@ private:
     void request_sound(std::string filename);
     void request_random_sound();
 
-    std::vector<std::string> sound_files = {
-        "AI_welcome.wav",
-        "bleep.wav",
-        "fein-fein-fein-fein.wav",
-        "hull_breach.wav",
-        "AI_pun.wav",
-        "AI_system_failure.wav",
-        "ahead_flank.wav",
-        "no_power.wav",
-        "silent_running.wav"
-    };
+    std::vector<std::string> sound_files;
 
   };
   

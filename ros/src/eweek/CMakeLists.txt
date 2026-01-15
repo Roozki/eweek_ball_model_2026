@@ -11,13 +11,14 @@ find_package(rclcpp REQUIRED)
 find_package(serial REQUIRED)
 find_package(geometry_msgs REQUIRED)
 find_package(std_msgs REQUIRED)
+find_package(ament_index_cpp REQUIRED)
 
 include_directories(
   include
 )
 
 add_executable(app src/app.cpp include/app.h)
-ament_target_dependencies(app rclcpp serial geometry_msgs std_msgs)
+ament_target_dependencies(app rclcpp serial geometry_msgs std_msgs ament_index_cpp)
 
 
 install(DIRECTORY 
