@@ -43,9 +43,9 @@ enum class MsgId : uint8_t {
     drive_backward   = 0xD2,
 
     // "Position" drive commands
-    drive_to_squidward,     // detect cup.
-    drive_to_spongebob_end, // IR sensor detection
-    drive_to_patrick_start, // IR sensor detection
+    // drive_to_squidward,     // detect cup.
+    // drive_to_spongebob_end, // IR sensor detection
+    // drive_to_patrick_start, // IR sensor detection
     // mcu -> computer
 
     play_sound = 0xC1, //?
@@ -59,8 +59,8 @@ enum class MsgId : uint8_t {
 
     patrick_house_state, // 1 = open, 0 = closed
 
-    bot_location
 
+    ir_state,
 };
 
 }

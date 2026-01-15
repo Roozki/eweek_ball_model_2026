@@ -24,6 +24,7 @@ spigot_servo.attach(9);
   sonar_squidward_cup.init();
   sonar_patrick_cup.init();
   sonar_spongebob_cup.init();
+  pinMode(PATRICK_HOUSE_LIMIT_SWITCH_PIN, INPUT_PULLUP);
   
 }
 
@@ -54,7 +55,14 @@ void loop() {
   }
 // spigot_servo.writeMicroseconds(1300);
 
-
+int patrick_house_state = digitalRead(PATRICK_HOUSE_LIMIT_SWITCH_PIN);
+if(patrick_house_state == 0)
+{
+  comms::send(comms::MsgId::patrick_house_state, "1");
+} else
+{
+  comms::send(comms::MsgId::patrick_house_state, "0");
+}
 
 // Serial.println(squidward_cup_distance);
 delay(50);
