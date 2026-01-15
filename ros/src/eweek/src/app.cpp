@@ -140,9 +140,6 @@ void EWeekApp::structure_rx()
                 // else is an error
 
             }
-
-
-
         }
     }
 }

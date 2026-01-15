@@ -37,9 +37,15 @@ enum class MsgId : uint8_t {
     sound_played    = 0xA1, // A for acks?
     comm_ack        = 0xA2,
 
+    // Raw drive commands
     drive_stop      = 0xD0,
     drive_forward   = 0xD1,
     drive_backward   = 0xD2,
+
+    // "Position" drive commands
+    drive_to_squidward,     // detect cup.
+    drive_to_spongebob_end, // IR sensor detection
+    drive_to_patrick_start, // IR sensor detection
     // mcu -> computer
 
     play_sound = 0xC1, //?
@@ -47,7 +53,11 @@ enum class MsgId : uint8_t {
  
     squidward_cup = 0xC2,
     open_spigot = 0xC3,
-    close_spigot = 0xC4
+    close_spigot = 0xC4,
+
+    patrick_house_state, // 1 = open, 0 = closed
+
+    bot_location
 
 };
 
