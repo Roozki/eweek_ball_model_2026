@@ -1,18 +1,24 @@
 #pragma once
 #include <Arduino.h>
+
+#ifdef esp
 #include <ESP32Servo.h>
+#endif
 
-
-#include "pinout_esp.h"
+#ifdef arduino
+#include <Servo.h>
+#endif
 
 class Spigot {
 public:
-    Spigot(Servo& servo) : servo(servo) {};
+    Spigot(Servo& servo, int pin) : servo(servo), pin(pin) {};
 
     void init() {
-      pinMode(SPIGOT_SERVO_PIN, OUTPUT);
+    //   pinMode(pin, OUTPUT);
+      #ifdef esp
         servo.setPeriodHertz(50);
-        servo.attach(SPIGOT_SERVO_PIN);
+    #endif
+        servo.attach(pin);
     }
 
     void open() {
@@ -26,7 +32,9 @@ public:
 
 private:
     Servo& servo;
-    const uint32_t open_pos_us = 2000u;
-    const uint32_t close_pos_us = 1000u;
+    int pin = 0;
+    const uint32_t open_pos_us = 1500u;
+    const uint32_t close_pos_us = 920u;
+    //Hitech HS 55 - 900 -> 2100us . 1500us center
 
 };

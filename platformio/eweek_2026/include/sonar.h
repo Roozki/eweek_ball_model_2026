@@ -8,47 +8,49 @@
 
 // }
 
-static inline constexpr float SPEED_SOUND_MPS = 343;
+// static inline constexpr float SPEED_SOUND_MPS = 343;
 
 
 
 class Sonar {
 public:
-    Sonar() {};
+    Sonar(int echo_pin, int trig_pin) : echo_pin(echo_pin), trig_pin(trig_pin) {};
 
     void init() {
-        // pinMode(SONIC_FRONT_ECHO_PIN, INPUT);
-        // pinMode(SONIC_FRONT_TRIG_PIN, OUTPUT);
-        // digitalWrite(SONIC_FRONT_TRIG_PIN, LOW);
+        pinMode(echo_pin, INPUT);
+        pinMode(trig_pin, OUTPUT);
+        digitalWrite(trig_pin, LOW);
     }
 
-    uint32_t get_distance()
+    float find_distance_mm()
     {
+        reset();
         start_wave();
-        await_wave();
+        float duration = await_wave();
+        float distance_mm = (duration*.0343*10)/((float)2);
+        return distance_mm;
     }
 
 private:
+    int echo_pin;
+    int trig_pin;
+
 
     void start_wave()
     {
-        // digitalWrite(SONIC_FRONT_TRIG_PIN, HIGH);
+        digitalWrite(trig_pin, HIGH);
         delayMicroseconds(10);
+        digitalWrite(trig_pin, LOW);
     }
-    void await_wave()
+    float await_wave()
     {
-        // pulseIn(SONI)
+       return pulseIn(echo_pin, HIGH, 100000);
     }
 
     void reset()
     {
-        // digitalWrite(SONIC_FRONT_TRIG_PIN, LOW);
+        digitalWrite(trig_pin, LOW);
         delayMicroseconds(2); // Reset
     }
-
-    // void trig_interrupt()
-    // {
-
-    // }
 
 };

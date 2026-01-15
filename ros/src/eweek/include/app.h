@@ -35,11 +35,16 @@ public:
 
 private:
 
-    unsigned long esp_bot_baud = 115200;//19200;
-    string esp_bot_port = "/dev/serial/by-id/usb-1a86_USB_Serial-if00-port0";
+    unsigned long bot_serial_baud = 115200;
+    unsigned long structure_serial_baud = 115200;
+    string bot_serial_port = "/dev/serial/by-id/usb-1a86_USB_Serial-if00-port0";
+    string structure_serial_port = "/dev/serial/by-id/usb-1a86_USB2.0-Serial-if00-port0";
 
-    serial::Serial bot_esp;
-    serial::Timeout timeout_uart = serial::Timeout::simpleTimeout(1000); // E.g., 1000 ms or 1 second
+    serial::Serial bot_serial;
+    serial::Serial structure_serial;
+    
+    serial::Timeout bot_serial_timeout = serial::Timeout::simpleTimeout(100);
+    serial::Timeout arduino_serial_timeout = serial::Timeout::simpleTimeout(100);
 
 
     // rclcpp::Subscription<rover_msgs::msg::ArmCommand>::SharedPtr command_subscriber;
@@ -58,10 +63,10 @@ private:
     rclcpp::TimerBase::SharedPtr bot_rx_timer_;
     rclcpp::TimerBase::SharedPtr structure_rx_timer_;
 
-    std::thread serialRxThread;
+    // std::thread bot_?serialRxThread;
 
-    void serial_rx_bot_esp(); //? should be static inline?
-    void serial_rx_structure(); //? should be static inline?
+    void bot_rx(); //? should be static inline?
+    void structure_rx(); //? should be static inline?
     void create_msg(MsgId msg_id, char (&msg)[MAX_MSG_SIZE_BYTES], char *data = nullptr);
     void request_sound(std::string filename);
 

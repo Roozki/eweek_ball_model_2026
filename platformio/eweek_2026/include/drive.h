@@ -25,6 +25,7 @@ public:
 
     void init() {
         // ledcAttachChannel(A_pwm_pin, PWM_FREQ, PWM_RES, RIGHT_PWM_CH);
+        #ifdef esp
         ledcSetup(RIGHT_PWM_CH, PWM_FREQ, PWM_RES);
         ledcAttachPin(A_pwm_pin, RIGHT_PWM_CH);
 
@@ -43,10 +44,12 @@ public:
         digitalWrite(in4_pin, LOW);
         // analogWrite(A_pwm_pin, 0);
         // analogWrite(B_pwm_pin, 0);
+        #endif
     }
 
     void run(uint32_t timestamp_ms = 0) // Must be called regularily to deal with accelleration
     {
+        #ifdef esp
         ledcWrite(RIGHT_PWM_CH, current_A_speed);
         ledcWrite(LEFT_PWM_CH, current_B_speed);
         // analogWrite(A_pwm_pin, current_A_speed);
@@ -68,7 +71,7 @@ public:
             handle_accel(current_B_speed, desired_B_speed);
             this->last_run_timestamp_ms = timestamp_ms;
         }
-
+        #endif
     }
 
     void setSpeed(int32_t speed)
@@ -80,6 +83,7 @@ public:
     // Like set gear
     void setState(DriveState state) 
     {
+        #ifdef esp
         this->current_drive_state = state;
 
         switch(current_drive_state){
@@ -111,6 +115,7 @@ public:
 
 
         }
+        #endif
     }
 
     void setAccel(uint32_t accel)

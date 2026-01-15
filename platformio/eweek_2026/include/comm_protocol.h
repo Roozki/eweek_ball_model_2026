@@ -1,5 +1,5 @@
 #pragma once   
-#include <cstdint>
+// #include <cstdint>
 
 namespace comms {
 
@@ -44,6 +44,10 @@ enum class MsgId : uint8_t {
 
     play_sound = 0xC1, //?
     comm_ping = 0xE1,
+ 
+    squidward_cup = 0xC2,
+    open_spigot = 0xC3,
+    close_spigot = 0xC4
 
 };
 

@@ -1,8 +1,8 @@
 #pragma once
 // Arduino based comms
 #include <Arduino.h>
-#include <drive.h>
-#include <main_datatypes.h>
+#include "drive.h"
+#include "main_datatypes.h"
 #include "comm_protocol.h"
 
 namespace comms {
@@ -62,6 +62,16 @@ void parse_buffer(char (&buff)[MAX_RX_MSG_SIZE_BYTES])
                     Serial.println("Comms acked!");
                 }
             }
+        case MsgId::open_spigot:
+            spigot.open();
+            Serial.println("Spigot: Open");
+
+            break;
+        case MsgId::close_spigot:
+            Serial.println("Spigot: Close");
+
+            spigot.close();
+            break;
         default:
             Serial.println("Unkown: Error");
             break;
