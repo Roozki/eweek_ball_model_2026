@@ -84,7 +84,7 @@ void EWeekApp::bot_rx()
         if (buffer.size() > 0){
             if(buffer.find(static_cast<uint8_t>(comms::MsgId::comm_ping)) != std::string::npos){
                 RCLCPP_INFO(this->get_logger(), "comms acked - bot");
-                request_sound("bleep.wav");
+                request_random_sound();
                 char msg[comms::MAX_MSG_SIZE_BYTES] = "";
                 create_msg(comms::MsgId::comm_ack, msg);
                 bot_serial.write(msg);
@@ -113,7 +113,7 @@ void EWeekApp::structure_rx()
             // Comm ack
             if(buffer.find(static_cast<uint8_t>(comms::MsgId::comm_ping)) != std::string::npos){
                 RCLCPP_INFO(this->get_logger(), "comms acked - structure");
-                request_sound("AI_engine_up.wav");
+                request_random_sound();
                 char msg[comms::MAX_MSG_SIZE_BYTES] = "";
                 create_msg(comms::MsgId::comm_ack, msg);
                 structure_serial.write(msg);
@@ -128,7 +128,7 @@ void EWeekApp::structure_rx()
                     // Squidward cup detected
                     if(!flag)
                     {
-                        request_sound("bleep.wav");
+                        request_random_sound();
                     }
                     flag = true;
                 }
@@ -149,4 +149,17 @@ void EWeekApp::request_sound(std::string filename)
     std_msgs::msg::String msg;
     msg.data = filename;
     speaker_publisher->publish(msg);
+}
+
+void EWeekApp::request_random_sound()
+{
+    if (sound_files.empty()) return;
+    
+    // Static generator to seed once
+    static std::random_device rd;
+    static std::mt19937 gen(rd());
+    std::uniform_int_distribution<> dis(0, sound_files.size() - 1);
+    
+    std::string random_file = sound_files[dis(gen)];
+    request_sound(random_file);
 }

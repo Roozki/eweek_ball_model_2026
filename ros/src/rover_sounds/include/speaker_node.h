@@ -1,6 +1,10 @@
 #include <rclcpp/rclcpp.hpp>
 #include <std_msgs/msg/string.hpp>
 
+#include <filesystem>
+#include <random>
+#include <vector>
+
 #include <SFML/Audio.hpp>
 #include <iostream>
 #include <ament_index_cpp/get_package_share_directory.hpp>
@@ -24,12 +28,34 @@ public:
 
     void playSound(const std::string& soundFileName) {
         sf::SoundBuffer buffer;
+        std::string file_to_play = sound_path + soundFileName;
 
-        if (!buffer.loadFromFile(sound_path + soundFileName)) {
-            std::cerr << "Failed to load sound file: " << soundFileName << std::endl;
+        if (std::filesystem::exists(file_to_play) && std::filesystem::is_directory(file_to_play)) {
+             std::vector<std::string> files;
+             for (const auto& entry : std::filesystem::directory_iterator(file_to_play)) {
+                 if (entry.is_regular_file()) {
+                      // Optional: Filter for audio files
+                      std::string ext = entry.path().extension().string();
+                      if (ext == ".wav" || ext == ".ogg") {
+                          files.push_back(entry.path().string());
+                      }
+                 }
+             }
+             
+             if (!files.empty()) {
+                 static std::random_device rd;
+                 static std::mt19937 gen(rd());
+                 std::uniform_int_distribution<> dis(0, files.size() - 1);
+                 file_to_play = files[dis(gen)];
+                 std::cerr << "Selected random sound: " << file_to_play << std::endl;
+             }
+        }
+
+        if (!buffer.loadFromFile(file_to_play)) {
+            std::cerr << "Failed to load sound file: " << file_to_play << std::endl;
             return;
         }else {
-            std::cerr << "Load Success: " << soundFileName << std::endl;
+            std::cerr << "Load Success: " << file_to_play << std::endl;
           
         }
 
