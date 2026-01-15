@@ -20,7 +20,7 @@ EWeekApp::EWeekApp() : Node("EWeek_App")
     structure_serial.open();
     double bot_period = 1.0 / BOT_RX_POLL_RATE;
     double structure_period = 1.0 / STRUCTURE_RX_POLL_RATE;
-    double app_period = 1.0 / 100;
+    double app_period = 1.0 / 50;
 
     bot_rx_timer_ = this->create_wall_timer(
     std::chrono::duration<double>(bot_period), std::bind(&EWeekApp::bot_rx, this));
@@ -156,11 +156,14 @@ void EWeekApp::run_app()
                 state = State::drive_to_patrick_start;                
             }
             break;            
-            
-            
+        }
+        
+    RCLCPP_INFO(this->get_logger(), "IR_STATE: %d", bot_ir_state);
+RCLCPP_INFO(this->get_logger(), "PATRICK_HOUSE: %d", patrick_house_state);
+RCLCPP_INFO(this->get_logger(), "PATRICK_CUP: %d", patrick_cup_state);
+RCLCPP_INFO(this->get_logger(), "SQUIDWARD_CUP: %d", squidward_cup_state);
+RCLCPP_INFO(this->get_logger(), "SPONGEBOB_CUP: %d", spongebob_cup_state);
 
-
-    }
 
 }
 
@@ -199,7 +202,7 @@ void EWeekApp::bot_rx()
         //timeoutCounter ++;
        // next_char = teensy.read(); 
         buffer = bot_serial.read(RX_UART_BUFF_SIZE_BYTES);
-        RCLCPP_WARN(this->get_logger(), "%s", buffer.c_str());
+        // RCLCPP_WARN(this->get_logger(), "%s", buffer.c_str());
         // if(next_char == "\n" || next_char == "\r" || next_char == "\0"){
         //     timeoutCounter = RX_UART_BUFF;
         // }
@@ -240,7 +243,7 @@ void EWeekApp::structure_rx()
         //timeoutCounter ++;
        // next_char = teensy.read(); 
         buffer = structure_serial.read(RX_UART_BUFF_SIZE_BYTES);
-        RCLCPP_WARN(this->get_logger(), "%s", buffer.c_str());
+        // RCLCPP_WARN(this->get_logger(), "%s", buffer.c_str());
         // if(next_char == "\n" || next_char == "\r" || next_char == "\0"){
         //     timeoutCounter = RX_UART_BUFF;
         // }
@@ -252,25 +255,21 @@ void EWeekApp::structure_rx()
                 char msg[comms::MAX_MSG_SIZE_BYTES] = "";
                 create_msg(comms::MsgId::comm_ack, msg);
                 structure_serial.write(msg);
-                return;
+                // return;
             }
             int msgid_pos = buffer.find(static_cast<uint8_t>(comms::MsgId::squidward_cup));
             if(msgid_pos != std::string::npos)
             {
                 static bool flag = false;
-                if(buffer.find("(1)") != std::string::npos)
+                if(buffer.find("(SQUID_1)") != std::string::npos)
                 {
                     // Squidward cup detected
-                    if(!flag)
-                    {
-                        request_sound("bleep.wav");
-                    }
-                    flag = true;
+                    squidward_cup_state = CUP_PRESENT;
                 }
 
-                if(buffer.find("(0)") != std::string::npos)
+                if(buffer.find("(SQUID_0)") != std::string::npos)
                 {
-                    flag = false;
+                    squidward_cup_state = CUP_NOT_PRESENT;
                 }
                 // else is a parsing error
 
@@ -279,21 +278,47 @@ void EWeekApp::structure_rx()
             msgid_pos = buffer.find(static_cast<uint8_t>(comms::MsgId::patrick_house_state));
             if(msgid_pos != std::string::npos)
             {
-                static bool flag = false;
-                if(buffer.find("(1)") != std::string::npos)
+                // static bool flag = false;
+                if(buffer.find("(PAT_HOUSE_1)") != std::string::npos)
                 {
-                    // Patrick house open
-                    if(!flag)
-                    {
-                        request_sound("bleep.wav");
-                    }
-                    flag = true;
+                    patrick_house_state = PATRICK_HOUSE_OPEN;
                 }
 
                 // Patrick house closed
-                if(buffer.find("(0)") != std::string::npos)
+                if(buffer.find("(PAT_HOUSE_0)") != std::string::npos)
                 {
-                    flag = false;
+                    patrick_house_state = PATRICK_HOUSE_CLOSED;
+
+                }
+            }
+
+            msgid_pos = buffer.find(static_cast<uint8_t>(comms::MsgId::patrick_cup));
+            if(msgid_pos != std::string::npos)
+            {
+                if(buffer.find("(PAT_1)") != std::string::npos)
+                {
+                    patrick_cup_state = CUP_PRESENT;                    
+                }
+
+                // Patrick house closed
+                if(buffer.find("(PAT_0)") != std::string::npos)
+                {
+                    patrick_cup_state = CUP_NOT_PRESENT;
+                }
+            }
+
+            msgid_pos = buffer.find(static_cast<uint8_t>(comms::MsgId::spongebob_cup));
+            if(msgid_pos != std::string::npos)
+            {
+                if(buffer.find("(SPONGE_1)") != std::string::npos)
+                {
+                    spongebob_cup_state = CUP_PRESENT;                    
+                }
+
+                // Patrick house closed
+                if(buffer.find("(SPONGE_0)") != std::string::npos)
+                {
+                    spongebob_cup_state = CUP_NOT_PRESENT;
                 }
             }
         }

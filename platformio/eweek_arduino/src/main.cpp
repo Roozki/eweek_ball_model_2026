@@ -37,20 +37,26 @@ void loop() {
   float spongebob_cup_distance = sonar_spongebob_cup.find_distance_mm();
   if(squidward_cup_distance <= SQUIDWARD_CUP_DETECTION_UPPER_THRESH_MM && squidward_cup_distance >= SQUIDWARD_CUP_DETECTION_LOWER_THRESH_MM )
   {
+    // comms::send(comms::MsgId::squidward_cup, "SQUID 1");
     comms::send(comms::MsgId::squidward_cup, "1");
   } else {
+    // comms::send(comms::MsgId::squidward_cup, "SQUID 0");
     comms::send(comms::MsgId::squidward_cup, "0");
   }
   if(spongebob_cup_distance <= SPONGEBOB_CUP_DETECTION_UPPER_THRESH_MM && squidward_cup_distance >= SQUIDWARD_CUP_DETECTION_LOWER_THRESH_MM )
   {
+    // comms::send(comms::MsgId::spongebob_cup, "SPONGE 1");
     comms::send(comms::MsgId::spongebob_cup, "1");
   } else {
+    // comms::send(comms::MsgId::spongebob_cup, "SPONGE 0");
     comms::send(comms::MsgId::spongebob_cup, "0");
   }
   if(patrick_cup_distance <= PATRICK_CUP_DETECTION_UPPER_THRESH_MM && squidward_cup_distance >= SQUIDWARD_CUP_DETECTION_LOWER_THRESH_MM )
   {
+    // comms::send(comms::MsgId::patrick_cup, "PATRICK 1");
     comms::send(comms::MsgId::patrick_cup, "1");
   } else {
+    // comms::send(comms::MsgId::patrick_cup, "PATRICk 0");
     comms::send(comms::MsgId::patrick_cup, "0");
   }
 // spigot_servo.writeMicroseconds(1300);

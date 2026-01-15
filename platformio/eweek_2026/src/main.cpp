@@ -13,8 +13,8 @@ void setup() {
   // pinMode(LED_DATA_PIN, OUTPUT);
   machine.init();
   drive.init();
-  drive.setSpeed(30);
-  drive.setAccel(10);
+  drive.setSpeed(25);
+  drive.setAccel(40);
   // FastLED.addLeds<WS2812, LED_DATA_PIN, BRG>(leds, NUM_LEDS);
   // FastLED.setBrightness(50);
   // FastLED.show();
