@@ -158,7 +158,7 @@ void EWeekApp::request_random_sound()
     // Static generator to seed once
     static std::random_device rd;
     static std::mt19937 gen(rd());
-    std::uniform_int_distribution<> dis(0, sound_files.size() - 1);
+    std::uniform_int_distribution<int> dis(0, sound_files.size() - 1);
     
     std::string random_file = sound_files[dis(gen)];
     request_sound(random_file);
