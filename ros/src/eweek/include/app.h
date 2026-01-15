@@ -17,6 +17,22 @@
 #define BOT_RX_POLL_RATE 50
 #define STRUCTURE_RX_POLL_RATE 50
 
+#define PATRICK_HOUSE_CLOSED 0
+#define PATRICK_HOUSE_OPEN 1
+
+#define CUP_NOT_PRESENT 0
+#define CUP_PRESENT 1
+
+#define IR_AT_END 1
+#define IR_IN_MIDDLE 0
+
+inline static constexpr float CUP_FILL_TIME_SECONDS = 5.0;
+inline static constexpr float WAIT_TIME_AFTER_PATRICK_CLOSE = 1.0;
+inline static constexpr float PATRICK_HYSTERIPUSSY_TIME_SECONDS = 0.1;
+inline static constexpr float SQUIDWARD_HYSTERIPUSSY_TIME_SECONDS = 0.05;
+inline static constexpr float SPONGEBOB_HYSTERIPUSSY_TIME_SECONDS = 0.05;
+inline static constexpr float USER_CUP_TAKE_HYSTERISUSSY_TIME_SECONDS = 5.0;
+
 
 using std::string;
 using namespace comms;
@@ -64,6 +80,7 @@ private:
 
     rclcpp::TimerBase::SharedPtr bot_rx_timer_;
     rclcpp::TimerBase::SharedPtr structure_rx_timer_;
+    rclcpp::TimerBase::SharedPtr app_timer;
 
     // std::thread bot_?serialRxThread;
 
@@ -71,9 +88,31 @@ private:
     void structure_rx(); //? should be static inline?
     void create_msg(MsgId msg_id, char (&msg)[MAX_MSG_SIZE_BYTES], char *data = nullptr);
     void request_sound(std::string filename);
-    void request_random_sound();
+    void run_app();
 
-    std::vector<std::string> sound_files;
+    int bot_ir_state = -1;
+    int patrick_house_state = -1; 
+
+    int patrick_cup_state = -1;
+    int squidward_cup_state = -1;
+    int spongebob_cup_state = -1;
+
+    enum class State {
+        startup,
+        drive_out_of_patrick,
+        drive_to_patrick_start,
+        drive_to_squidward,
+        drive_to_sponge_end,
+        drive_out_of_spongebob,
+        await_patrick_open,
+        await_patrick_cup,
+        await_patrick_close,
+        fill_cup, // open, wait, close
+        await_user_take_cup,
+
+    };
+
+    State state = State::startup;
 
   };
   

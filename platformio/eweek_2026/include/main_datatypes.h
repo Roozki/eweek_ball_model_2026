@@ -18,11 +18,14 @@
 
 #ifdef esp
 inline Servo spigot_servo;
-inline Spigot spigot(&spigot_servo);
+inline Spigot spigot(spigot_servo, 0);
 #endif
 
 #ifdef arduino
 inline Sonar sonar_squidward_cup(SONIC_SQUIDWARD_ECHO_PIN, SONIC_SQUIDWARD_TRIG_PIN);
+inline Sonar sonar_patrick_cup(SONIC_PATRICK_ECHO_PIN, SONIC_PATRICK_TRIG_PIN);
+inline Sonar sonar_spongebob_cup(SONIC_SPONGEBOB_ECHO_PIN, SONIC_SPONGEBOB_TRIG_PIN);
+
 // extern Servo spigot_servo;
 extern Spigot spigot;
 #endif

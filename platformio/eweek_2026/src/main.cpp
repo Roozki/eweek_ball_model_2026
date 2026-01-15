@@ -2,6 +2,8 @@
 
 using namespace comms;
 
+int poll_ir();
+
 void setup() {
 
   // Serial.begin(115200);
@@ -11,12 +13,15 @@ void setup() {
   // pinMode(LED_DATA_PIN, OUTPUT);
   machine.init();
   drive.init();
-  drive.setSpeed(40);
-  drive.setAccel(10);
-  FastLED.addLeds<WS2812, LED_DATA_PIN, BRG>(leds, NUM_LEDS);
-  FastLED.setBrightness(50);
-  FastLED.show();
-  delay(1000);
+  drive.setSpeed(25);
+  drive.setAccel(40);
+  // FastLED.addLeds<WS2812, LED_DATA_PIN, BRG>(leds, NUM_LEDS);
+  // FastLED.setBrightness(50);
+  // FastLED.show();
+
+  pinMode(IR_DATA_PIN, INPUT);
+
+  delay(100);
   // Serial.println(comms::STARTUP_MSG);
 }
 
@@ -29,6 +34,15 @@ void loop() {
 
   uint32_t timestamp_ms = millis();
   comms::poll_rx_buffer();
+  int ir_state = poll_ir(); 
+  // stupid easy sending
+  if(ir_state == 1)
+  {
+    comms::send(MsgId::ir_state, "A");
+  } else 
+  {
+    comms::send(MsgId::ir_state, "B");
+  }
   // digitalWrite(LED_DATA_PIN, HIGH);
   // send(comms::MsgId::play_sound, "ON");
   // for(auto &led : leds)
@@ -39,7 +53,7 @@ void loop() {
   {
     if(timestamp_ms - machine.last_comm_ack_msg_timestamp_ms >= machine.comm_ack_msg_period_ms)
     {
-      comms::send(MsgId::comm_ping);
+      // comms::send(MsgId::comm_ping);
       machine.last_comm_ack_msg_timestamp_ms = timestamp_ms;
     }
   }
@@ -84,5 +98,13 @@ void loop() {
   // FastLED.show();
   // // spigot.close();
   // delay(500);
+
+}
+
+
+
+int poll_ir()
+{
+ return digitalRead(IR_DATA_PIN);
 
 }
