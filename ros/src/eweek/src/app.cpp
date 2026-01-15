@@ -140,10 +140,25 @@ void EWeekApp::structure_rx()
 
             }
 
-            msgid_pos = buffer.find(static_cast<uint8_t>(comms::MsgId::patrick_house_state))
+            msgid_pos = buffer.find(static_cast<uint8_t>(comms::MsgId::patrick_house_state));
             if(msgid_pos != std::string::npos)
             {
-                
+                static bool flag = false;
+                if(buffer.find("(1)") != std::string::npos)
+                {
+                    // Patrick house open
+                    if(!flag)
+                    {
+                        request_sound("bleep.wav");
+                    }
+                    flag = true;
+                }
+
+                // Patrick house closed
+                if(buffer.find("(0)") != std::string::npos)
+                {
+                    flag = false;
+                }
             }
         }
     }
