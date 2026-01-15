@@ -52,8 +52,10 @@ enum class MsgId : uint8_t {
     comm_ping = 0xE1,
  
     squidward_cup = 0xC2,
-    open_spigot = 0xC3,
-    close_spigot = 0xC4,
+    patrick_cup = 0xC3,
+    spongebob_cup = 0xC4,
+    open_spigot = 0xC8,
+    close_spigot = 0xC9,
 
     patrick_house_state, // 1 = open, 0 = closed
 

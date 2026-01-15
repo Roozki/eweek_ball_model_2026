@@ -9,6 +9,12 @@
 #define SONIC_SQUIDWARD_TRIG_PIN 13
 #define SONIC_SQUIDWARD_ECHO_PIN 12
 
+#define SONIC_PATRICK_TRIG_PIN 11
+#define SONIC_PATRICK_ECHO_PIN 10
+
+#define SONIC_SPONGEBOB_TRIG_PIN 7
+#define SONIC_SPONGEBOB_ECHO_PIN 6
+
 // Servo for drink spigot
 //Default: ±60º, Non-programmable / Pulse Width: 900~2100μs(Center:1500μs) HS-55 hitec
 #define SPIGOT_SERVO_PIN 9
@@ -16,6 +22,9 @@
 
 // LEDS
 #define LED_DATA_PIN 2
+
+#define PATRICK_HOUSE_LIMIT_SWITCH_PIN 4
+
 
 
 // DRIVE (none for arduino)

@@ -88,7 +88,6 @@ void EWeekApp::bot_rx()
                 char msg[comms::MAX_MSG_SIZE_BYTES] = "";
                 create_msg(comms::MsgId::comm_ack, msg);
                 bot_serial.write(msg);
-
             }
         }
     }
@@ -137,8 +136,14 @@ void EWeekApp::structure_rx()
                 {
                     flag = false;
                 }
-                // else is an error
+                // else is a parsing error
 
+            }
+
+            msgid_pos = buffer.find(static_cast<uint8_t>(comms::MsgId::patrick_house_state))
+            if(msgid_pos != std::string::npos)
+            {
+                
             }
         }
     }
