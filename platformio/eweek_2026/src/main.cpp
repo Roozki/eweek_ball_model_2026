@@ -28,7 +28,7 @@ void setup() {
   pinMode(IR_DATA_PIN_BACK, INPUT_PULLUP);
 
 
-  delay(10);
+  delay(1);
   // Serial.println(comms::STARTUP_MSG);
 }
 
@@ -52,10 +52,10 @@ void loop() {
     comms::send(MsgId::ir_state_front, "IR_FRONT_0");
     if(ir_state_front != prev_ir_front_state)
     {
-      drive.current_A_speed = 0;
-      drive.current_B_speed = 0;
-      drive.run(timestamp_ms);
-      delay(500);
+     
+      drive.setState(DriveState::stop);
+
+      // delay(500);
     }
   }
       prev_ir_front_state = ir_state_front;
@@ -68,10 +68,12 @@ void loop() {
     comms::send(MsgId::ir_state_back, "IR_BACK_0");
         if(ir_state_back != prev_ir_back_state)
     {
-      drive.current_A_speed = 0;
-      drive.current_B_speed = 0;
-      drive.run(timestamp_ms);
-      delay(500);
+      // drive.current_A_speed = 0;
+      // drive.current_B_speed = 0;
+      // drive.run(timestamp_ms);
+      drive.setState(DriveState::stop);
+      // drive.run(timestamp_mse/)
+      // delay(500);
     }
   }
 

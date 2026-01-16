@@ -131,7 +131,7 @@ void EWeekApp::run_app()
             structure_serial.write(structure_msg);
             structure_serial.write(structure_msg);
             memset(structure_msg, 0, comms::MAX_MSG_SIZE_BYTES); // wipe message
-            sleep(CUP_FILL_TIME_SECONDS);
+            // sleep(CUP_FILL_TIME_SECONDS);
             create_msg(comms::MsgId::close_spigot, structure_msg);
             structure_serial.write(structure_msg);
             structure_serial.write(structure_msg);
@@ -140,6 +140,7 @@ void EWeekApp::run_app()
             break;
         case State::drive_to_sponge_end:
             RCLCPP_WARN(this->get_logger(), "DRIVE TO SPONGEBOB");
+            sleep(CUP_FILL_TIME_SECONDS);
 
             if(bot_ir_state_front = IR_IN_MIDDLE)
             {

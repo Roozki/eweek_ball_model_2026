@@ -49,9 +49,18 @@ public:
 
     void run(uint32_t timestamp_ms = 0) // Must be called regularily to deal with accelleration
     {
+ 
+        current_drive_life -= (timestamp_ms - last_run_timestamp_ms);
         #ifdef esp
+      
+        if((current_drive_life <= 0))
+        {
+            setState(DriveState::stop);
+        }
         ledcWrite(RIGHT_PWM_CH, current_A_speed);
         ledcWrite(LEFT_PWM_CH, current_B_speed);
+
+
         // analogWrite(A_pwm_pin, current_A_speed);
         // analogWrite(B_pwm_pin, current_B_speed);
 
@@ -65,13 +74,14 @@ public:
         //     digitalWrite(in3_pin, LOW);
         //     digitalWrite(in4_pin, LOW);
         // }
-        if(timestamp_ms - this->last_run_timestamp_ms >= this->update_period_ms)
-        {
+        // if(timestamp_ms - this->last_run_timestamp_ms >= this->update_period_ms)
+        // {
             handle_accel(current_A_speed, desired_A_speed);
             handle_accel(current_B_speed, desired_B_speed);
-            this->last_run_timestamp_ms = timestamp_ms;
-        }
-        #endif
+            // this->last_run_timestamp_ms = timestamp_ms;s
+        // }
+
+    #endif
     }
 
     void setSpeed(int32_t speed)
@@ -91,9 +101,15 @@ public:
                 // setSpeed(0);
                 this->desired_A_speed = 0;
                 this->desired_B_speed = 0;
+                digitalWrite(in1_pin, LOW);
+                digitalWrite(in2_pin, LOW);
+
+                digitalWrite(in3_pin, LOW);
+                digitalWrite(in4_pin, LOW);
                 // Allow accel to stop motors
                 break;
             case DriveState::forward:
+                current_drive_life = drive_life_max;
                 this->desired_A_speed = setpoint_speed;
                 this->desired_B_speed = setpoint_speed;
 
@@ -104,6 +120,7 @@ public:
                 digitalWrite(in4_pin, HIGH);
                 break;
             case DriveState::backward:
+                current_drive_life = drive_life_max;
                 this->desired_A_speed = setpoint_speed;
                 this->desired_B_speed = setpoint_speed;
                 digitalWrite(in1_pin, HIGH);
@@ -165,26 +182,29 @@ public:
 
     int32_t setpoint_speed = 30;
 
+    int32_t drive_life_max = 50; //ms
+    int32_t current_drive_life = 50;
+
     void handle_accel(int32_t& current_speed, int32_t desired_speed)
     {
         // accell
-        if(current_speed < desired_speed)
-        {
-            current_speed += max_accel;
-            if(current_speed > desired_speed){
-                current_speed = desired_speed;
-            }
-        }
+        // if(current_speed < desired_speed)
+        // {
+        //     current_speed += max_accel;
+        //     if(current_speed > desired_speed){
+        //         current_speed = desired_speed;
+        //     }
+        // }
 
-        // decel
-        if(current_speed > desired_speed)
-        {
-            current_speed -= max_accel;
-            if(current_speed < desired_speed){
-                current_speed = desired_speed;
-            }
-        }
-
+        // // decel
+        // if(current_speed > desired_speed)
+        // {
+        //     current_speed -= max_accel;
+        //     if(current_speed < desired_speed){
+        //         current_speed = desired_speed;
+        //     }
+        // }
+        current_speed = desired_speed;
 
         // if(current_speed - this->max_accel > desired_speed)
         // {
