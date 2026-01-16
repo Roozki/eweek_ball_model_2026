@@ -54,7 +54,7 @@ void loop() {
     if(ir_state_front != prev_ir_front_state)
     {
      
-      drive.setState(DriveState::stop);
+      // drive.setState(DriveState::stop);
 
       // delay(500);
     }
@@ -72,7 +72,7 @@ void loop() {
       // drive.current_A_speed = 0;
       // drive.current_B_speed = 0;
       // drive.run(timestamp_ms);
-      drive.setState(DriveState::stop);
+      // drive.setState(DriveState::stop);
       // drive.run(timestamp_mse/)
       // delay(500);
     }

@@ -103,11 +103,11 @@ public:
                 // setSpeed(0);
                 this->current_A_speed = 0;
                 this->current_B_speed = 0;
-                digitalWrite(in1_pin, HIGH);
-                digitalWrite(in2_pin, HIGH);
+                digitalWrite(in1_pin, LOW);
+                digitalWrite(in2_pin, LOW);
 
-                digitalWrite(in3_pin, HIGH);
-                digitalWrite(in4_pin, HIGH);
+                digitalWrite(in3_pin, LOW);
+                digitalWrite(in4_pin, LOW);
                 // Allow accel to stop motors
                 break;
             case DriveState::forward:

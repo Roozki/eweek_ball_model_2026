@@ -142,12 +142,12 @@ void EWeekApp::run_app()
             RCLCPP_WARN(this->get_logger(), "DRIVE TO SPONGEBOB");
             // sleep(CUP_FILL_TIME_SECONDS);
 
-            if(bot_ir_state_front = IR_IN_MIDDLE)
+            if(bot_ir_state_front == IR_IN_MIDDLE)
             {
                 create_msg(comms::MsgId::drive_forward, bot_msg);
                 bot_serial.write(bot_msg);
             }
-            if(bot_ir_state_front = IR_AT_END && spongebob_cup_state == CUP_PRESENT) //! logic hook
+            if(bot_ir_state_front == IR_AT_END && spongebob_cup_state == CUP_PRESENT) //! logic hook
             {
                 sleep(SPONGEBOB_HYSTERIPUSSY_TIME_SECONDS);
                 create_msg(comms::MsgId::drive_stop, bot_msg);

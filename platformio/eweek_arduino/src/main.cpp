@@ -11,7 +11,16 @@
 #define SPONGEBOB_CUP_DETECTION_LOWER_THRESH_MM 0//50
 
 
-#define DEBUG_CUP_SENSE
+// #define DEBUG_CUP_SENSE
+#define bubble_up 140
+#define bubble_down 0
+
+uint32_t bubble_time_ms = 2000;
+bool bubble_flag = false;
+
+uint32_t last_bubble_timestamp_ms = 0;
+
+Servo bubble_servo;
 
 Servo spigot_servo;
 Spigot spigot(spigot_servo, SPIGOT_SERVO_PIN);
@@ -20,6 +29,7 @@ void setup() {
   comms::init();
   // spigot.init();
 spigot_servo.attach(9);
+bubble_servo.attach(2);
 
   spigot.close();
   Serial.println("Arduino start");
@@ -74,6 +84,21 @@ if(patrick_house_state == 0)
 
 // Serial.println(squidward_cup_distance);
 delay(10);
+
+
+if(timestamp_ms - last_bubble_timestamp_ms > bubble_time_ms)
+{
+  bubble_flag = !bubble_flag;
+  if(bubble_flag)
+  {
+    bubble_servo.write(bubble_down);
+
+  }else {
+    bubble_servo.write(bubble_up);
+
+  }
+  
+}
 
 
 

@@ -44,15 +44,15 @@ void parse_buffer(char (&buff)[MAX_RX_MSG_SIZE_BYTES])
     {
         case MsgId::drive_stop:
             drive.setState(DriveState::stop);
-            Serial.println("Stop");
+            // Serial.println("Stop");
             break;
         case MsgId::drive_forward:
             drive.setState(DriveState::forward);
-            Serial.println("Forward");
+            // Serial.println("Forward");
             break;
         case MsgId::drive_backward: 
             drive.setState(DriveState::backward);
-            Serial.println("Backwards");
+            // Serial.println("Backwards");
             break;
         case MsgId::comm_ack:
             if(machine.get_state() == State::await_comms_ack)
