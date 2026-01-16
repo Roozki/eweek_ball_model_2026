@@ -63,6 +63,7 @@ void parse_buffer(char (&buff)[MAX_RX_MSG_SIZE_BYTES])
                 }
             }
         case MsgId::open_spigot:
+            
             spigot.open();
             Serial.println("Spigot: Open");
 

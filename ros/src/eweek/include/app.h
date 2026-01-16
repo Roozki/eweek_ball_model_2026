@@ -27,6 +27,7 @@
 #define IR_IN_MIDDLE 0
 
 inline static constexpr float CUP_FILL_TIME_SECONDS = 5.0;
+inline static constexpr float CUP_FILL_DELAY_TIME_SECONDS = 1.0;
 inline static constexpr float WAIT_TIME_AFTER_PATRICK_CLOSE = 1.0;
 inline static constexpr float PATRICK_HYSTERIPUSSY_TIME_SECONDS = 0.05;
 inline static constexpr float SQUIDWARD_HYSTERIPUSSY_TIME_SECONDS = 0.05;

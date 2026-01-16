@@ -58,7 +58,12 @@ void EWeekApp::run_app()
             // {
                 state = State::drive_to_patrick_start;
             // } //else, wait for ir state to be known
+
             RCLCPP_WARN(this->get_logger(), "STARTUP");
+            sleep(1);
+                request_sound("m-e-o-w.wav");
+                request_sound("gary_meow.wav");
+
             break;
         case State::drive_to_patrick_start:
             RCLCPP_WARN(this->get_logger(), "DRIVE TO PATRICK");
@@ -71,6 +76,8 @@ void EWeekApp::run_app()
             {
                 create_msg(comms::MsgId::drive_stop, bot_msg);
                 bot_serial.write(bot_msg);
+                request_sound("gary_meow.wav");
+
                 // bot_serial.write(bot_msg); // double send for good measure
                 state = State::await_patrick_open;
             }
@@ -80,6 +87,8 @@ void EWeekApp::run_app()
 
             if(patrick_house_state == PATRICK_HOUSE_OPEN)
             {
+                request_sound("gary_meow.wav");
+
                 state = State::await_patrick_cup;
             }
             break;
@@ -88,6 +97,8 @@ void EWeekApp::run_app()
 
             if(patrick_cup_state == CUP_PRESENT)
             {
+                request_sound("gary_meow.wav");
+
                 state = State::await_patrick_close;
             }
             break;
@@ -96,6 +107,7 @@ void EWeekApp::run_app()
 
             if(patrick_house_state == PATRICK_HOUSE_CLOSED)
             {
+                request_sound("this-is-patrick.wav");
                 sleep(WAIT_TIME_AFTER_PATRICK_CLOSE); // ahh so stupdi
                 state = State::drive_to_squidward;
             }
@@ -117,10 +129,13 @@ void EWeekApp::run_app()
                 create_msg(comms::MsgId::drive_stop, bot_msg);
                 // bot_serial.write(bot_msg);
                 bot_serial.write(bot_msg);
+
                 state = State::fill_cup;
             }
             break;
         case State::fill_cup:
+            
+                request_sound("m-e-o-w.wav");
                 RCLCPP_INFO(this->get_logger(), "FILL CUP START");
             create_msg(comms::MsgId::drive_stop, bot_msg);
                 // bot_serial.write(bot_msg);
@@ -135,6 +150,8 @@ void EWeekApp::run_app()
             create_msg(comms::MsgId::close_spigot, structure_msg);
             structure_serial.write(structure_msg);
             structure_serial.write(structure_msg);
+            sleep(CUP_FILL_DELAY_TIME_SECONDS);
+
             state = State::drive_to_sponge_end;
 
             break;
@@ -152,6 +169,7 @@ void EWeekApp::run_app()
                 sleep(SPONGEBOB_HYSTERIPUSSY_TIME_SECONDS);
                 create_msg(comms::MsgId::drive_stop, bot_msg);
                 bot_serial.write(bot_msg);
+                request_sound("there-i-am-gary.wav");
                 state = State::await_user_take_cup;
             }
             break;

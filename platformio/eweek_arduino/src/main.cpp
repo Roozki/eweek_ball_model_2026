@@ -12,8 +12,9 @@
 
 
 // #define DEBUG_CUP_SENSE
-#define bubble_up 140
+#define bubble_up 50
 #define bubble_down 0
+int bubble_pos = 0;
 
 uint32_t bubble_time_ms = 2000;
 bool bubble_flag = false;
@@ -29,7 +30,7 @@ void setup() {
   comms::init();
   // spigot.init();
 spigot_servo.attach(9);
-bubble_servo.attach(2);
+bubble_servo.attach(3);
 
   spigot.close();
   Serial.println("Arduino start");
@@ -77,28 +78,42 @@ int patrick_house_state = digitalRead(PATRICK_HOUSE_LIMIT_SWITCH_PIN);
 if(patrick_house_state == 0)
 {
   comms::send(comms::MsgId::patrick_house_state, "PAT_HOUSE_1");
+  spigot.lock = false;
+
 } else
 {
   comms::send(comms::MsgId::patrick_house_state, "PAT_HOUSE_0");
+  spigot.lock = true;
+  spigot.close();
 }
 
 // Serial.println(squidward_cup_distance);
 delay(10);
 
+if(spigot.state == true)
+{
+    bubble_pos = bubble_up;
+} else {
+    bubble_pos = bubble_down;
+
+}
 
 if(timestamp_ms - last_bubble_timestamp_ms > bubble_time_ms)
 {
   bubble_flag = !bubble_flag;
   if(bubble_flag)
   {
-    bubble_servo.write(bubble_down);
+    bubble_pos = bubble_down;
+    bubble_time_ms = 50000;
 
   }else {
-    bubble_servo.write(bubble_up);
-
+    bubble_pos = bubble_up;
+    bubble_time_ms = 2000;
+    
   }
-  
+  last_bubble_timestamp_ms = timestamp_ms;
 }
+bubble_servo.write(bubble_pos);
 
 
 
