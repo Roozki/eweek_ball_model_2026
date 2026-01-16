@@ -39,8 +39,9 @@ void run_app()
 
 void loop() {
 
-  uint32_t timestamp_ms = millis();
+  uint32_t timestamp_ms = millis();  
   comms::poll_rx_buffer();
+  drive.run(timestamp_ms);
   int ir_state_front = poll_ir_front(); 
   int ir_state_back = poll_ir_back(); 
   // stupid easy sending
@@ -111,7 +112,6 @@ void loop() {
   // }
   // drive.current_A_speed = 80;
   // drive.current_B_speed = 80;
-  drive.run(timestamp_ms);
                 // digitalWrite(RIGHT_A_IN1_PIN, HIGH);
                 // digitalWrite(RIGHT_A_IN2_PIN, LOW);
           // analogWrite(drive.A_pwm_pin, drive.current_A_speed);
@@ -119,7 +119,7 @@ void loop() {
 
   // Serial.println(drive.current_A_speed);
 
-  delay(20);
+  delay(10);
   // FastLED.show();
   // // spigot.open();
   // delay(500);
