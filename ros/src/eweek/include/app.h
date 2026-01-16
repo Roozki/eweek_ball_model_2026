@@ -12,8 +12,10 @@
 #define TX_UART_BUFF_SIZE_BYTES 128
 #define RX_UART_BUFF_SIZE_BYTES 128
 
-#define BOT_RX_POLL_RATE 50
-#define STRUCTURE_RX_POLL_RATE 50
+#define BOT_RX_POLL_RATE 100
+#define STRUCTURE_RX_POLL_RATE 100
+#define APP_RUN_RATE 100
+
 
 #define PATRICK_HOUSE_CLOSED 0
 #define PATRICK_HOUSE_OPEN 1
@@ -26,7 +28,7 @@
 
 inline static constexpr float CUP_FILL_TIME_SECONDS = 5.0;
 inline static constexpr float WAIT_TIME_AFTER_PATRICK_CLOSE = 1.0;
-inline static constexpr float PATRICK_HYSTERIPUSSY_TIME_SECONDS = 0.1;
+inline static constexpr float PATRICK_HYSTERIPUSSY_TIME_SECONDS = 0.05;
 inline static constexpr float SQUIDWARD_HYSTERIPUSSY_TIME_SECONDS = 0.05;
 inline static constexpr float SPONGEBOB_HYSTERIPUSSY_TIME_SECONDS = 0.05;
 inline static constexpr float USER_CUP_TAKE_HYSTERISUSSY_TIME_SECONDS = 5.0;
@@ -88,7 +90,8 @@ private:
     void request_sound(std::string filename);
     void run_app();
 
-    int bot_ir_state = -1;
+    int bot_ir_state_front = -1;
+    int bot_ir_state_back = -1;
     int patrick_house_state = -1; 
 
     int patrick_cup_state = -1;

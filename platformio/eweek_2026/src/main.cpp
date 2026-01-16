@@ -2,7 +2,12 @@
 
 using namespace comms;
 
-int poll_ir();
+int poll_ir_front();
+int poll_ir_back();
+
+int prev_ir_front_state = 0;
+int prev_ir_back_state = 0;
+
 
 void setup() {
 
@@ -13,15 +18,17 @@ void setup() {
   // pinMode(LED_DATA_PIN, OUTPUT);
   machine.init();
   drive.init();
-  drive.setSpeed(25);
-  drive.setAccel(40);
+  drive.setSpeed(30);
+  drive.setAccel(50);
   // FastLED.addLeds<WS2812, LED_DATA_PIN, BRG>(leds, NUM_LEDS);
   // FastLED.setBrightness(50);
   // FastLED.show();
 
-  pinMode(IR_DATA_PIN, INPUT);
+  pinMode(IR_DATA_PIN_FRONT, INPUT_PULLUP);
+  pinMode(IR_DATA_PIN_BACK, INPUT_PULLUP);
 
-  delay(100);
+
+  delay(10);
   // Serial.println(comms::STARTUP_MSG);
 }
 
@@ -34,15 +41,42 @@ void loop() {
 
   uint32_t timestamp_ms = millis();
   comms::poll_rx_buffer();
-  int ir_state = poll_ir(); 
+  int ir_state_front = poll_ir_front(); 
+  int ir_state_back = poll_ir_back(); 
   // stupid easy sending
-  if(ir_state == 1)
+  if(ir_state_front == 1)
   {
-    comms::send(MsgId::ir_state, "A");
+    comms::send(MsgId::ir_state_front, "IR_FRONT_1");
   } else 
   {
-    comms::send(MsgId::ir_state, "B");
+    comms::send(MsgId::ir_state_front, "IR_FRONT_0");
+    if(ir_state_front != prev_ir_front_state)
+    {
+      drive.current_A_speed = 0;
+      drive.current_B_speed = 0;
+      drive.run(timestamp_ms);
+      delay(500);
+    }
   }
+      prev_ir_front_state = ir_state_front;
+
+  if(ir_state_back == 1)
+  {
+    comms::send(MsgId::ir_state_back, "IR_BACK_1");
+  } else 
+  {
+    comms::send(MsgId::ir_state_back, "IR_BACK_0");
+        if(ir_state_back != prev_ir_back_state)
+    {
+      drive.current_A_speed = 0;
+      drive.current_B_speed = 0;
+      drive.run(timestamp_ms);
+      delay(500);
+    }
+  }
+
+      prev_ir_back_state = ir_state_back;
+
   // digitalWrite(LED_DATA_PIN, HIGH);
   // send(comms::MsgId::play_sound, "ON");
   // for(auto &led : leds)
@@ -83,7 +117,7 @@ void loop() {
 
   // Serial.println(drive.current_A_speed);
 
-  delay(1);
+  delay(20);
   // FastLED.show();
   // // spigot.open();
   // delay(500);
@@ -103,8 +137,13 @@ void loop() {
 
 
 
-int poll_ir()
+int poll_ir_front()
 {
- return digitalRead(IR_DATA_PIN);
+ return digitalRead(IR_DATA_PIN_FRONT);
+
+}
+int poll_ir_back()
+{
+ return digitalRead(IR_DATA_PIN_BACK);
 
 }

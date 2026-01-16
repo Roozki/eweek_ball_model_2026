@@ -14,7 +14,8 @@
 #define LED_DATA_PIN 2
 
 // IR SENSOR
-#define IR_DATA_PIN 17
+#define IR_DATA_PIN_FRONT 16
+#define IR_DATA_PIN_BACK 17
 
 
 // DRIVE

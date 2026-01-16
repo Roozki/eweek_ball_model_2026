@@ -60,7 +60,9 @@ enum class MsgId : uint8_t {
     patrick_house_state, // 1 = open, 0 = closed
 
 
-    ir_state,
+    ir_state_front,
+    ir_state_back,
+    
 };
 
 }

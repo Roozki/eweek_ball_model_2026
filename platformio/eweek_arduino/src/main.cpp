@@ -1,8 +1,8 @@
 #include <Arduino.h>
 #include "../include/main.h"
 
-#define SQUIDWARD_CUP_DETECTION_UPPER_THRESH_MM 60
-#define SQUIDWARD_CUP_DETECTION_LOWER_THRESH_MM 50
+#define SQUIDWARD_CUP_DETECTION_UPPER_THRESH_MM 65
+#define SQUIDWARD_CUP_DETECTION_LOWER_THRESH_MM 45
 
 #define PATRICK_CUP_DETECTION_UPPER_THRESH_MM 60
 #define PATRICK_CUP_DETECTION_LOWER_THRESH_MM 0//50
@@ -10,6 +10,8 @@
 #define SPONGEBOB_CUP_DETECTION_UPPER_THRESH_MM 60
 #define SPONGEBOB_CUP_DETECTION_LOWER_THRESH_MM 0//50
 
+
+#define DEBUG_CUP_SENSE
 
 Servo spigot_servo;
 Spigot spigot(spigot_servo, SPIGOT_SERVO_PIN);
@@ -38,40 +40,40 @@ void loop() {
   if(squidward_cup_distance <= SQUIDWARD_CUP_DETECTION_UPPER_THRESH_MM && squidward_cup_distance >= SQUIDWARD_CUP_DETECTION_LOWER_THRESH_MM )
   {
     // comms::send(comms::MsgId::squidward_cup, "SQUID 1");
-    comms::send(comms::MsgId::squidward_cup, "1");
+    comms::send(comms::MsgId::squidward_cup, "SQUID_1");
   } else {
     // comms::send(comms::MsgId::squidward_cup, "SQUID 0");
-    comms::send(comms::MsgId::squidward_cup, "0");
+    comms::send(comms::MsgId::squidward_cup, "SQUID_0");
   }
   if(spongebob_cup_distance <= SPONGEBOB_CUP_DETECTION_UPPER_THRESH_MM && squidward_cup_distance >= SQUIDWARD_CUP_DETECTION_LOWER_THRESH_MM )
   {
     // comms::send(comms::MsgId::spongebob_cup, "SPONGE 1");
-    comms::send(comms::MsgId::spongebob_cup, "1");
+    comms::send(comms::MsgId::spongebob_cup, "SPONGE_1");
   } else {
     // comms::send(comms::MsgId::spongebob_cup, "SPONGE 0");
-    comms::send(comms::MsgId::spongebob_cup, "0");
+    comms::send(comms::MsgId::spongebob_cup, "SPONGE_0");
   }
   if(patrick_cup_distance <= PATRICK_CUP_DETECTION_UPPER_THRESH_MM && squidward_cup_distance >= SQUIDWARD_CUP_DETECTION_LOWER_THRESH_MM )
   {
     // comms::send(comms::MsgId::patrick_cup, "PATRICK 1");
-    comms::send(comms::MsgId::patrick_cup, "1");
+    comms::send(comms::MsgId::patrick_cup, "PAT_1");
   } else {
     // comms::send(comms::MsgId::patrick_cup, "PATRICk 0");
-    comms::send(comms::MsgId::patrick_cup, "0");
+    comms::send(comms::MsgId::patrick_cup, "PAT_0");
   }
 // spigot_servo.writeMicroseconds(1300);
 
 int patrick_house_state = digitalRead(PATRICK_HOUSE_LIMIT_SWITCH_PIN);
 if(patrick_house_state == 0)
 {
-  comms::send(comms::MsgId::patrick_house_state, "1");
+  comms::send(comms::MsgId::patrick_house_state, "PAT_HOUSE_1");
 } else
 {
-  comms::send(comms::MsgId::patrick_house_state, "0");
+  comms::send(comms::MsgId::patrick_house_state, "PAT_HOUSE_0");
 }
 
 // Serial.println(squidward_cup_distance);
-delay(50);
+delay(10);
 
 
 
